@@ -1,33 +1,39 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  mode: "light",
+  mode: 'light',
+  activeProfileId: null,
   user: null,
   token: null,
   posts: [],
+  friends: [],
 };
 
 export const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {
     setMode: (state) => {
-      state.mode = state.mode === "light" ? "dark" : "light";
+      state.mode = state.mode === 'light' ? 'dark' : 'light';
     },
-    setLogin: (state, action) => {
-      state.user = action.payload.user;
+    setActiveProfile: (state, action) => {
+      state.activeProfileId = action.payload.userId;
+    },
+    setToken: (state, action) => {
       state.token = action.payload.token;
+    },
+    setUser: (state, action) => {
+      state.user = action.payload.user;
     },
     setLogout: (state) => {
       state.user = null;
       state.token = null;
+      state.activeProfileId = null;
+      state.posts = [];
+      state.friends = [];
     },
     setFriends: (state, action) => {
-      if (state.user) {
-        state.user.friends = action.payload.friends;
-      } else {
-        console.error("user friends non-existent :(");
-      }
+      state.friends = action.payload.friends;
     },
     setPosts: (state, action) => {
       state.posts = action.payload.posts;
@@ -41,9 +47,23 @@ export const authSlice = createSlice({
       });
       state.posts = updatedPosts;
     },
+    removePost: (state, action) => {
+      state.posts = state.posts.filter(
+        (post) => post._id !== action.payload.post._id
+      );
+    },
   },
 });
 
-export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost } =
-  authSlice.actions;
+export const {
+  setMode,
+  setUser,
+  setToken,
+  setLogout,
+  setFriends,
+  setPosts,
+  setPost,
+  removePost,
+  setActiveProfile,
+} = authSlice.actions;
 export default authSlice.reducer;
