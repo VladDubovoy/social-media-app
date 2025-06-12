@@ -1,0 +1,32 @@
+{
+  "name": "social-media-app",
+  "version": "1.0.0",
+  "description": "Social Media Application with React, Node.js, Express, MongoDB",
+  "main": "index.js",
+  "engines": {
+    "node": ">=18.17.0",
+    "npm": ">=9.0.0"
+  },
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd back-end && npm run dev",
+    "client": "cd front-end && npm start",
+    "install-all": "npm run setup-nvm && npm install && cd front-end && npm install && cd ../back-end && npm install",
+    "build": "cd front-end && npm run build",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "setup-nvm": "nvm install && nvm use",
+    "preinstall": "node -v | grep -q \"v18\" || (echo \"Please use Node.js v18\" && exit 1)"
+  },
+  "keywords": [
+    "social-media",
+    "react",
+    "node",
+    "express",
+    "mongodb"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+} 
