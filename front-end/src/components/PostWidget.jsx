@@ -1,15 +1,17 @@
 import { useState } from 'react';
-import { Box, Button, Divider, IconButton, Typography, useTheme } from '@mui/material';
+import { Box, Button, Divider, IconButton, Typography, useTheme, Tooltip } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import FlexBetween from './FlexBetween';
 import UserImage from './UserImage';
 import { API_ENDPOINTS } from '../config/api.config';
-import { setPost, setPosts } from '../state';
+import { setPost, setPosts, setFriends } from '../state';
 import { DeleteOutlined } from '@mui/icons-material';
 
 const PostWidget = ({
@@ -23,38 +25,32 @@ const PostWidget = ({
   likes = {},
   comments = [],
 }) => {
-    
   const [isComments, setIsComments] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { _id } = useSelector((state) => state.auth.user);
   const token = useSelector((state) => state.auth.token);
-  const loggedInUserId = useSelector((state) => state.auth.user?._id);
-  const isLiked = Boolean(loggedInUserId && likes?.[loggedInUserId]);
-  const likeCount = Object.keys(likes || {}).length;
+  const friends = useSelector((state) => state.auth.user?.friends) || [];
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const primary = palette.primary.main;
+  const medium = palette.neutral.medium;
+  const isLiked = Boolean(likes[_id]);
+  const likeCount = Object.keys(likes).length;
+  const isFriend = Array.isArray(friends) && friends.includes(postUserId);
+  const isOwnPost = _id === postUserId;
 
   const patchLike = async () => {
-    if (!loggedInUserId) {
+    if (!_id) {
       toast.error('Please log in to like posts', {
         duration: 3000,
         position: 'top-center',
         style: {
           background: '#333',
           color: '#fff',
-        },
-      });
-      return;
-    }
-
-    if (!postId) {
-      toast.error('Post ID is missing', {
-        duration: 3000,
-        position: 'top-center',
-        style: {
-          background: '#333',
-          color: '#fff',
+          borderRadius: '10px',
+          padding: '16px',
         },
       });
       return;
@@ -82,24 +78,68 @@ const PostWidget = ({
         style: {
           background: '#333',
           color: '#fff',
+          borderRadius: '10px',
+          padding: '16px',
         },
+        icon: '❌',
       });
     }
   };
 
-  const handleRemovePost = async () => {
-    if (!loggedInUserId) {
-      toast.error('Please log in to remove posts', {
+  const patchFriend = async () => {
+    if (isLoading) return;
+    
+    try {
+      setIsLoading(true);
+      const response = await fetch(API_ENDPOINTS.USERS.FRIEND(_id, postUserId), {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update friend status');
+      }
+
+      const updatedUser = await response.json();
+      
+      // Update Redux state with the new friends array from the updated user
+      dispatch(setFriends({ friends: updatedUser.friends }));
+      
+      toast.success(
+        isFriend ? 'Removed from friends' : 'Added to friends',
+        {
+          duration: 3000,
+          position: 'top-center',
+          style: {
+            background: '#333',
+            color: '#fff',
+            borderRadius: '10px',
+            padding: '16px',
+          },
+          icon: isFriend ? '👋' : '👋',
+        }
+      );
+    } catch (error) {
+      toast.error(error.message || 'Failed to update friend status', {
         duration: 3000,
         position: 'top-center',
         style: {
           background: '#333',
           color: '#fff',
+          borderRadius: '10px',
+          padding: '16px',
         },
+        icon: '❌',
       });
-      return;
+    } finally {
+      setIsLoading(false);
     }
+  };
 
+  const handleRemovePost = async () => {
     if (!postId) {
       toast.error('Post ID is missing', {
         duration: 3000,
@@ -107,6 +147,8 @@ const PostWidget = ({
         style: {
           background: '#333',
           color: '#fff',
+          borderRadius: '10px',
+          padding: '16px',
         },
       });
       return;
@@ -133,6 +175,8 @@ const PostWidget = ({
         style: {
           background: '#333',
           color: '#fff',
+          borderRadius: '10px',
+          padding: '16px',
         },
       });
     } catch (error) {
@@ -142,6 +186,8 @@ const PostWidget = ({
         style: {
           background: '#333',
           color: '#fff',
+          borderRadius: '10px',
+          padding: '16px',
         },
       });
     }
@@ -156,30 +202,57 @@ const PostWidget = ({
     >
       <FlexBetween gap="1rem">
         <FlexBetween gap="1rem">
-          <UserImage image={userPicturePath} userId={postUserId} />
+          <UserImage image={userPicturePath} size="55px" userId={postUserId} />
           <Box>
             <Typography
               color={main}
               variant="h5"
               fontWeight="500"
-              onClick={() => {
-                navigate(`/profile/${postUserId}`);
-              }}
               sx={{
                 '&:hover': {
                   color: primary,
                   cursor: 'pointer',
                 },
               }}
+              onClick={() => {
+                navigate(`/profile/${postUserId}`);
+              }}
             >
               {name}
             </Typography>
-            <Typography color={palette.neutral.medium}>{location}</Typography>
+            <Typography color={medium} fontSize="0.75rem">
+              {location}
+            </Typography>
           </Box>
         </FlexBetween>
-        {loggedInUserId === postUserId && (
+        {!isOwnPost && (
+          <Tooltip title={isFriend ? "Remove Friend" : "Add Friend"}>
+            <span>
+              <IconButton
+                onClick={patchFriend}
+                disabled={isLoading}
+                sx={{
+                  backgroundColor: isFriend ? palette.error.main : primary,
+                  p: '0.6rem',
+                  '&:hover': {
+                    backgroundColor: isFriend ? palette.error.dark : palette.primary.dark,
+                    transform: 'scale(1.1)',
+                  },
+                  transition: 'all 0.3s ease',
+                }}
+              >
+                {isFriend ? (
+                  <PersonRemoveIcon sx={{ color: '#fff' }} />
+                ) : (
+                  <PersonAddIcon sx={{ color: '#fff' }} />
+                )}
+              </IconButton>
+            </span>
+          </Tooltip>
+        )}
+        {isOwnPost && (
           <IconButton
-            onClick={() => handleRemovePost(postId)}
+            onClick={handleRemovePost}
             sx={{ color: palette.error.main }}
           >
             <DeleteOutlined />

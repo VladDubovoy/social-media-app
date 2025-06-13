@@ -9,6 +9,7 @@ const FriendListWidget = ({ userId }) => {
   const [friends, setFriends] = useState([]);
   const { palette } = useTheme();
   const token = useSelector((state) => state.auth.token);
+  const currentUserFriends = useSelector((state) => state.auth.user?.friends) || [];
 
   const getFriends = async () => {
     const response = await fetch(API_ENDPOINTS.USERS.FRIENDS(userId), {
@@ -21,7 +22,7 @@ const FriendListWidget = ({ userId }) => {
 
   useEffect(() => {
     getFriends();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [userId, token, currentUserFriends]); // Add currentUserFriends as a dependency
 
   return (
     <WidgetWrapper>

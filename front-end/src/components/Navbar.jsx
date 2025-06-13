@@ -133,6 +133,7 @@ const Navbar = React.memo(() => {
                   padding="0.5rem 1.5rem"
                   sx={{
                     transition: 'all 0.3s ease',
+                    border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.8)' : 'transparent'}`,
                     '&:hover': {
                       backgroundColor: theme.palette.mode === 'dark' ? theme.palette.background.default : neutralLight,
                       transform: 'translateY(-2px)',
@@ -164,7 +165,9 @@ const Navbar = React.memo(() => {
                       },
                     }}
                   >
-                    <Search sx={{ color: theme.palette.mode === 'dark' ? theme.palette.text.primary : dark }} />
+                    <Search sx={{ 
+                      color: theme.palette.mode === 'dark' ? theme.palette.text.primary : dark,
+                    }} />
                   </IconButton>
                 </FlexBetween>
               </Grow>
@@ -249,12 +252,14 @@ const Navbar = React.memo(() => {
                 <Select
                   value={fullName}
                   sx={{
-                    backgroundColor: neutralLight,
+                    backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
                     borderRadius: '20px',
+                    border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.8)' : 'transparent'}`,
                     p: '0.5rem 1rem',
                     transition: 'all 0.3s ease',
                     '&:hover': {
                       backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+                      borderColor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,1)' : 'transparent',
                     },
                     '& .MuiSvgIcon-root': {
                       pr: '0.25rem',
@@ -264,7 +269,16 @@ const Navbar = React.memo(() => {
                       backgroundColor: 'transparent',
                     },
                   }}
-                  input={<InputBase />}
+                  input={
+                    <InputBase 
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          border: 'none',
+                          padding: '0 !important',
+                        },
+                      }}
+                    />
+                  }
                 >
                   <MenuItem value={fullName}>
                     <Box display="flex" alignItems="center" gap="1rem">
@@ -425,10 +439,12 @@ const Navbar = React.memo(() => {
                     sx={{
                       backgroundColor: neutralLight,
                       borderRadius: '20px',
+                      border: `2px solid ${theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.8)' : 'transparent'}`,
                       p: '0.5rem 1rem',
                       transition: 'all 0.3s ease',
                       '&:hover': {
                         backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+                        borderColor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,1)' : 'transparent',
                       },
                       '& .MuiSvgIcon-root': {
                         pr: '0.25rem',
@@ -438,7 +454,16 @@ const Navbar = React.memo(() => {
                         backgroundColor: 'transparent',
                       },
                     }}
-                    input={<InputBase />}
+                    input={
+                      <InputBase 
+                        sx={{
+                          '& .MuiInputBase-input': {
+                            border: 'none',
+                            padding: '0 !important',
+                          },
+                        }}
+                      />
+                    }
                   >
                     <MenuItem value={fullName}>
                       <Box display="flex" alignItems="center" gap="1rem">

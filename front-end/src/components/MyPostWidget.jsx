@@ -35,11 +35,11 @@ const MyPostWidget = () => {
   const [image, setImage] = useState(null);
   const [post, setPost] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { palette } = useTheme();
+  const theme = useTheme();
   const { _id, picturePath, firstName, lastName } = useSelector((state) => state.auth.user);
   const token = useSelector((state) => state.auth.token);
-  const mediumMain = palette.neutral.mediumMain;
-  const medium = palette.neutral.medium;
+  const mediumMain = theme.palette.neutral.mediumMain;
+  const medium = theme.palette.neutral.medium;
 
   const handlePost = async () => {
     if (!post) {
@@ -140,9 +140,21 @@ const MyPostWidget = () => {
           value={post}
           sx={{
             width: "80%",
-            backgroundColor: palette.neutral.light,
+            backgroundColor: theme.palette.mode === 'dark' ? theme.palette.background.paper : theme.palette.neutral.light,
             borderRadius: "2rem",
             padding: "1rem 2rem",
+            border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.8)' : 'transparent'}`,
+            transition: 'all 0.3s ease',
+            '&:hover': {
+              borderColor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,1)' : 'transparent',
+            },
+            '& .MuiInputBase-input': {
+              color: theme.palette.mode === 'dark' ? theme.palette.text.primary : theme.palette.neutral.dark,
+              '&::placeholder': {
+                color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : theme.palette.neutral.medium,
+                opacity: 0.7,
+              },
+            },
           }}
         />
       </FlexBetween>
@@ -162,25 +174,39 @@ const MyPostWidget = () => {
               <FlexBetween>
                 <Box
                   {...getRootProps()}
-                  border={`2px dashed ${palette.primary.main}`}
+                  border={`2px dashed ${theme.palette.primary.main}`}
                   p="1rem"
                   width="100%"
-                  sx={{ "&:hover": { cursor: "pointer" } }}
+                  sx={{ 
+                    "&:hover": { 
+                      cursor: "pointer",
+                      borderColor: theme.palette.primary.light,
+                    },
+                    transition: 'all 0.3s ease',
+                  }}
                 >
                   <input {...getInputProps()} />
                   {!image ? (
-                    <p>Add Image Here</p>
+                    <Typography color={mediumMain}>Add Image Here</Typography>
                   ) : (
                     <FlexBetween>
-                      <Typography>{image.name}</Typography>
-                      <EditOutlined />
+                      <Typography color={theme.palette.mode === 'dark' ? theme.palette.text.primary : theme.palette.neutral.dark}>
+                        {image.name}
+                      </Typography>
+                      <EditOutlined sx={{ color: theme.palette.primary.main }} />
                     </FlexBetween>
                   )}
                 </Box>
                 {image && (
                   <IconButton
                     onClick={() => setImage(null)}
-                    sx={{ width: "15%" }}
+                    sx={{ 
+                      width: "15%",
+                      color: theme.palette.mode === 'dark' ? theme.palette.error.light : theme.palette.error.main,
+                      '&:hover': {
+                        backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+                      },
+                    }}
                   >
                     <DeleteOutlined />
                   </IconButton>
@@ -194,11 +220,26 @@ const MyPostWidget = () => {
       <Divider sx={{ margin: "1.25rem 0" }} />
 
       <FlexBetween>
-        <FlexBetween gap="0.25rem" onClick={() => setIsImage(!isImage)}>
+        <FlexBetween 
+          gap="0.25rem" 
+          onClick={() => setIsImage(!isImage)}
+          sx={{
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            '&:hover': {
+              transform: 'translateY(-2px)',
+            },
+          }}
+        >
           <ImageOutlined sx={{ color: mediumMain }} />
           <Typography
             color={mediumMain}
-            sx={{ "&:hover": { cursor: "pointer", color: medium } }}
+            sx={{ 
+              "&:hover": { 
+                color: theme.palette.primary.main,
+              },
+              transition: 'all 0.3s ease',
+            }}
           >
             Image
           </Typography>
@@ -208,15 +249,21 @@ const MyPostWidget = () => {
           disabled={!post.trim() || isLoading}
           onClick={handlePost}
           sx={{
-            color: palette.background.alt,
-            backgroundColor: palette.primary.main,
+            color: theme.palette.background.alt,
+            backgroundColor: theme.palette.primary.main,
             borderRadius: "3rem",
+            padding: "0.5rem 2rem",
+            transition: 'all 0.3s ease',
             "&:hover": {
-              backgroundColor: palette.primary.dark,
+              backgroundColor: theme.palette.primary.dark,
+              transform: 'translateY(-2px)',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
             },
             "&:disabled": {
-              backgroundColor: palette.neutral.medium,
-              color: palette.neutral.dark,
+              backgroundColor: theme.palette.neutral.medium,
+              color: theme.palette.neutral.dark,
+              transform: 'none',
+              boxShadow: 'none',
             },
           }}
         >

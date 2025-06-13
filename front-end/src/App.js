@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Box, CssBaseline } from '@mui/material';
+import { Box, CssBaseline, GlobalStyles } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import { themeSettings } from './palette/colors';
@@ -21,7 +21,28 @@ const App = () => {
     <ErrorBoundary>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Box width="100%" height="100%" minHeight="100vh">
+        <GlobalStyles
+          styles={{
+            'input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active': {
+              WebkitBoxShadow: mode === 'dark' 
+                ? '0 0 0 30px #121212 inset !important'
+                : '0 0 0 30px #ffffff inset !important',
+              WebkitTextFillColor: mode === 'dark' ? '#ffffff' : '#000000',
+              transition: 'background-color 5000s ease-in-out 0s',
+            },
+          }}
+        />
+        <Box 
+          width="100%" 
+          height="100%" 
+          minHeight="100vh"
+          sx={{
+            backgroundColor: mode === 'dark' ? theme.palette.background.default : theme.palette.background.default,
+            transition: 'all 0.3s ease',
+            WebkitBoxShadow: mode === 'dark' ? 'inset 0 0 100px rgba(0,0,0,0.5)' : 'none',
+            boxShadow: mode === 'dark' ? 'inset 0 0 100px rgba(0,0,0,0.5)' : 'none',
+          }}
+        >
           <Routes>
             <Route 
               path="/" 
