@@ -3,8 +3,8 @@ import { Box, IconButton, Typography, useTheme, Tooltip } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import PersonRemoveAlt1Icon from '@mui/icons-material/PersonRemoveAlt1';
 import FlexBetween from './FlexBetween';
 import UserImage from './UserImage';
 import { API_ENDPOINTS } from '../config/api.config';
@@ -119,9 +119,9 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
           }}
         >
           {isFriend ? (
-            <PersonRemoveIcon sx={{ color: '#fff' }} />
+            <PersonRemoveAlt1Icon sx={{ color: '#fff' }} />
           ) : (
-            <PersonAddIcon sx={{ color: '#fff' }} />
+            <PersonAddAlt1Icon sx={{ color: '#fff' }} />
           )}
         </IconButton>
       </Tooltip>

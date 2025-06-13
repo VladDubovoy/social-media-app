@@ -6,8 +6,8 @@ import toast from 'react-hot-toast';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import PersonRemoveAlt1Icon from '@mui/icons-material/PersonRemoveAlt1';
 import FlexBetween from './FlexBetween';
 import UserImage from './UserImage';
 import { API_ENDPOINTS } from '../config/api.config';
@@ -242,9 +242,9 @@ const PostWidget = ({
                 }}
               >
                 {isFriend ? (
-                  <PersonRemoveIcon sx={{ color: '#fff' }} />
+                  <PersonRemoveAlt1Icon sx={{ color: '#fff' }} />
                 ) : (
-                  <PersonAddIcon sx={{ color: '#fff' }} />
+                  <PersonAddAlt1Icon sx={{ color: '#fff' }} />
                 )}
               </IconButton>
             </span>
