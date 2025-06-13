@@ -12,7 +12,6 @@ router.post("/", verifyToken, upload.single("picture"), async (req, res, next) =
     const postData = {
       ...req.body,
       userId: req.user.id,
-      picturePath: req.file ? req.file.filename : null
     };
     const post = await postService.create(postData);
     res.status(201).json(post);
@@ -25,6 +24,15 @@ router.post("/", verifyToken, upload.single("picture"), async (req, res, next) =
 router.get("/feed", verifyToken, async (req, res, next) => {
   try {
     const posts = await postService.getUserFeed(req.user.id);
+    res.status(200).json(posts);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/search", verifyToken, async (req, res, next) => {
+  try {
+    const posts = await postService.searchPosts(req.query.q);
     res.status(200).json(posts);
   } catch (error) {
     next(error);
@@ -75,16 +83,6 @@ router.delete("/:postId/comments/:commentId", verifyToken, async (req, res, next
   try {
     const post = await postService.deleteComment(req.params.postId, req.params.commentId);
     res.status(200).json(post);
-  } catch (error) {
-    next(error);
-  }
-});
-
-/* SEARCH POSTS */
-router.get("/search", verifyToken, async (req, res, next) => {
-  try {
-    const posts = await postService.searchPosts(req.query.q);
-    res.status(200).json(posts);
   } catch (error) {
     next(error);
   }

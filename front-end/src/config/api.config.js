@@ -1,5 +1,5 @@
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
-const ASSETS_URL = process.env.REACT_APP_ASSETS_URL || 'http://localhost:3001/assets';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:6001';
+const ASSETS_URL = process.env.REACT_APP_ASSETS_URL || 'http://localhost:6001/assets';
 
 export const API_ENDPOINTS = {
   AUTH: {
@@ -15,6 +15,7 @@ export const API_ENDPOINTS = {
   POSTS: {
     BASE: `${API_URL}/posts`,
     CREATE: `${API_URL}/posts`,
+    FEED: `${API_URL}/posts/feed`,
     USER_POSTS: (userId) => `${API_URL}/posts/${userId}/posts`,
     LIKE: (postId) => `${API_URL}/posts/${postId}/like`,
     SINGLE: (postId) => `${API_URL}/posts/${postId}`,

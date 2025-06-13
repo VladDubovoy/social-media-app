@@ -1,144 +1,59 @@
-import React, { Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useMemo } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { CssBaseline, ThemeProvider, CircularProgress, Box } from '@mui/material';
-import { createTheme } from '@mui/material/styles';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Box, CssBaseline } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
-// Routes
-import { ProtectedRoute, PublicRoute, RootRoute, ROUTES } from './routes';
+import { themeSettings } from './palette/colors';
+import LoginPage from './components/LoginPage';
+import HomePage from './components/HomePage';
+import ProfilePage from './components/ProfilePage';
+import NotFound from './components/NotFound';
+import ErrorBoundary from './components/ErrorBoundary';
+import ProtectedRoute from './components/ProtectedRoute';
+import PublicRoute from './components/PublicRoute';
 
-// Theme
-import { themeSettings } from './theme';
-
-// Lazy loaded components
-const HomePage = lazy(() => import('components/HomePage'));
-const LoginPage = lazy(() => import('components/LoginPage'));
-const ProfilePage = lazy(() => import('components/ProfilePage'));
-const NotFoundPage = lazy(() => import('components/NotFoundPage'));
-
-/**
- * Loading component for Suspense fallback
- */
-const LoadingFallback = () => (
-  <Box
-    display="flex"
-    justifyContent="center"
-    alignItems="center"
-    minHeight="100vh"
-  >
-    <CircularProgress />
-  </Box>
-);
-
-/**
- * Error Boundary component to catch and handle errors
- */
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError(error) {
-    return { hasError: true };
-  }
-
-  componentDidCatch(error, errorInfo) {
-    console.error('Error caught by boundary:', error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <Box
-          display="flex"
-          flexDirection="column"
-          justifyContent="center"
-          alignItems="center"
-          minHeight="100vh"
-          p={3}
-        >
-          <h1>Something went wrong.</h1>
-          <p>Please try refreshing the page.</p>
-        </Box>
-      );
-    }
-
-    return this.props.children;
-  }
-}
-
-/**
- * Main application component
- */
-function App() {
-  // Theme setup
-  const mode = useSelector((state) => state.ui.mode);
-  const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
+const App = () => {
+  const isAuth = Boolean(useSelector((state) => state.auth.token));
+  const mode = useSelector((state) => state.auth.mode);
+  const theme = createTheme(themeSettings(mode));
 
   return (
     <ErrorBoundary>
-      <div className="app">
-        <BrowserRouter>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <ToastContainer
-              position="top-right"
-              autoClose={3000}
-              hideProgressBar={false}
-              newestOnTop
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Box width="100%" height="100%" minHeight="100vh">
+          <Routes>
+            <Route 
+              path="/" 
+              element={
+                <PublicRoute>
+                  <LoginPage />
+                </PublicRoute>
+              } 
             />
-            
-            <Suspense fallback={<LoadingFallback />}>
-              <Routes>
-                {/* Root route */}
-                <Route path={ROUTES.ROOT} element={<RootRoute />} />
-
-                {/* Public routes */}
-                <Route
-                  path={ROUTES.LOGIN}
-                  element={
-                    <PublicRoute>
-                      <LoginPage />
-                    </PublicRoute>
-                  }
-                />
-
-                {/* Protected routes */}
-                <Route
-                  path={ROUTES.HOME}
-                  element={
-                    <ProtectedRoute>
-                      <HomePage />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path={ROUTES.PROFILE}
-                  element={
-                    <ProtectedRoute>
-                      <ProfilePage />
-                    </ProtectedRoute>
-                  }
-                />
-
-                {/* 404 route */}
-                <Route path={ROUTES.NOT_FOUND} element={<NotFoundPage />} />
-              </Routes>
-            </Suspense>
-          </ThemeProvider>
-        </BrowserRouter>
-      </div>
+            <Route 
+              path="/home" 
+              element={
+                <ProtectedRoute>
+                  <HomePage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/profile/:userId" 
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              } 
+            />
+            {/* Catch all route - must be last */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Box>
+      </ThemeProvider>
     </ErrorBoundary>
   );
-}
+};
 
 export default App;

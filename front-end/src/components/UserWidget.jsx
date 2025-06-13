@@ -1,34 +1,61 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import FlexBetween from 'components/FlexBetween';
-import UserImage from 'components/UserImage';
-import WidgetWrapper from 'components/WidgetWrapper';
+import FlexBetween from './FlexBetween';
+import UserImage from './UserImage';
+import WidgetWrapper from './WidgetWrapper';
 import { API_ENDPOINTS } from '../config/api.config';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import WorkIcon from '@mui/icons-material/Work';
+import toast from 'react-hot-toast';
 
-const UserWidget = ({ userId, picturePath }) => {
+const UserWidget = ({ userId, name, subtitle, picturePath }) => {
+  
   const [user, setUser] = useState(null);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = useSelector((state) => state.auth.token);
   const { palette } = useTheme();
-  const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
 
   const getUser = async () => {
-    const response = await fetch(API_ENDPOINTS.USERS.PROFILE(userId), {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const data = await response.json();
-    setUser(data);
+    try {
+      const response = await fetch(API_ENDPOINTS.USERS.PROFILE(userId), {
+        method: 'GET',
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        credentials: 'include'
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to fetch user profile');
+      }
+
+      const data = await response.json();
+      setUser(data);
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      toast.error(error.message || 'Failed to fetch user profile', {
+        duration: 3000,
+        position: 'top-center',
+        style: {
+          background: '#333',
+          color: '#fff',
+        },
+      });
+    }
   };
 
   useEffect(() => {
-    getUser();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    if (userId) {
+      getUser();
+    }
+  }, [userId, token]); // Add dependencies
 
   if (!user) {
     return null;
@@ -39,9 +66,6 @@ const UserWidget = ({ userId, picturePath }) => {
     lastName,
     location,
     occupation,
-    viewedProfile,
-    impressions,
-    friends,
   } = user;
 
   return (
@@ -52,11 +76,11 @@ const UserWidget = ({ userId, picturePath }) => {
         onClick={() => navigate(`/profile/${userId}`)}
       >
         <FlexBetween gap="1rem">
-          <UserImage image={picturePath} />
+          <UserImage image={picturePath} userId={userId} />
           <Box>
             <Typography
               variant="h4"
-              color={dark}
+              color={main}
               fontWeight="500"
               sx={{
                 '&:hover': {
@@ -67,25 +91,21 @@ const UserWidget = ({ userId, picturePath }) => {
             >
               {firstName} {lastName}
             </Typography>
-            <Typography color={medium}>{friends.length} friends</Typography>
+            <Box display="flex" alignItems="center" gap="0.5rem">
+              <LocationOnIcon sx={{ fontSize: '0.75rem', color: medium }} />
+              <Typography color={medium} fontSize="0.75rem">
+                {location}
+              </Typography>
+            </Box>
+            <Box display="flex" alignItems="center" gap="0.5rem">
+              <WorkIcon sx={{ fontSize: '0.75rem', color: medium }} />
+              <Typography color={medium} fontSize="0.75rem">
+                {occupation}
+              </Typography>
+            </Box>
           </Box>
         </FlexBetween>
       </FlexBetween>
-
-      <Box p="1rem 0">
-        <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
-          <Typography color={main}>Who's viewed your profile</Typography>
-          <Typography color={main} fontWeight="500">
-            {viewedProfile}
-          </Typography>
-        </Box>
-        <Box display="flex" alignItems="center" gap="1rem">
-          <Typography color={main}>Impressions of your post</Typography>
-          <Typography color={main} fontWeight="500">
-            {impressions}
-          </Typography>
-        </Box>
-      </Box>
 
       <Box p="1rem 0">
         <Typography fontSize="1rem" color={main} fontWeight="500" mb="1rem">

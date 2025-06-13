@@ -1,16 +1,14 @@
-import React, { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
-import Friend from 'components/Friend';
-import WidgetWrapper from 'components/WidgetWrapper';
-import { useDispatch, useSelector } from 'react-redux';
-import { setFriends } from '../../state';
+import WidgetWrapper from './WidgetWrapper';
+import Friend from './Friend';
 import { API_ENDPOINTS } from '../config/api.config';
+import { useSelector } from 'react-redux';
 
 const FriendListWidget = ({ userId }) => {
-  const dispatch = useDispatch();
+  const [friends, setFriends] = useState([]);
   const { palette } = useTheme();
   const token = useSelector((state) => state.auth.token);
-  const friends = useSelector((state) => state.posts.friends);
 
   const getFriends = async () => {
     const response = await fetch(API_ENDPOINTS.USERS.FRIENDS(userId), {
@@ -18,7 +16,7 @@ const FriendListWidget = ({ userId }) => {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await response.json();
-    dispatch(setFriends({ friends: data }));
+    setFriends(data);
   };
 
   useEffect(() => {

@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { Box, IconButton, Typography, useTheme } from '@mui/material';
+import { useState } from 'react';
+import { Box, Button, Divider, IconButton, Typography, useTheme } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import FlexBetween from 'components/FlexBetween';
-import UserImage from 'components/UserImage';
-import {
-  ChatBubbleOutlineOutlined,
-  FavoriteOutlined,
-  FavoriteBorderOutlined,
-  ShareOutlined,
-} from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import FlexBetween from './FlexBetween';
+import UserImage from './UserImage';
 import { API_ENDPOINTS } from '../config/api.config';
-import { removePost, setPost } from 'state';
+import { setPost, setPosts } from '../state';
+import { DeleteOutlined } from '@mui/icons-material';
 
 const PostWidget = ({
   postId,
@@ -20,43 +20,131 @@ const PostWidget = ({
   location,
   picturePath,
   userPicturePath,
-  likes,
-  comments,
+  likes = {},
+  comments = [],
 }) => {
+    
   const [isComments, setIsComments] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const token = useSelector((state) => state.auth.token);
-  const loggedInUserId = useSelector((state) => state.auth.user._id);
-  const isLiked = Boolean(likes[loggedInUserId]);
-  const likeCount = Object.keys(likes).length;
-
+  const loggedInUserId = useSelector((state) => state.auth.user?._id);
+  const isLiked = Boolean(loggedInUserId && likes?.[loggedInUserId]);
+  const likeCount = Object.keys(likes || {}).length;
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const primary = palette.primary.main;
 
   const patchLike = async () => {
-    const response = await fetch(API_ENDPOINTS.POSTS.LIKE(postId), {
-      method: 'PATCH',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ userId: loggedInUserId }),
-    });
-    const updatedPost = await response.json();
-    dispatch(setPost({ post: updatedPost }));
+    if (!loggedInUserId) {
+      toast.error('Please log in to like posts', {
+        duration: 3000,
+        position: 'top-center',
+        style: {
+          background: '#333',
+          color: '#fff',
+        },
+      });
+      return;
+    }
+
+    if (!postId) {
+      toast.error('Post ID is missing', {
+        duration: 3000,
+        position: 'top-center',
+        style: {
+          background: '#333',
+          color: '#fff',
+        },
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch(API_ENDPOINTS.POSTS.LIKE(postId), {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to like post');
+      }
+
+      const updatedPost = await response.json();
+      dispatch(setPost({ post: updatedPost }));
+    } catch (error) {
+      toast.error(error.message || 'Failed to like post', {
+        duration: 3000,
+        position: 'top-center',
+        style: {
+          background: '#333',
+          color: '#fff',
+        },
+      });
+    }
   };
 
-  const deletePost = async () => {
-    const response = await fetch(API_ENDPOINTS.POSTS.DELETE(postId), {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    const deletedPost = await response.json();
-    dispatch(removePost({ post: deletedPost }));
+  const handleRemovePost = async () => {
+    if (!loggedInUserId) {
+      toast.error('Please log in to remove posts', {
+        duration: 3000,
+        position: 'top-center',
+        style: {
+          background: '#333',
+          color: '#fff',
+        },
+      });
+      return;
+    }
+
+    if (!postId) {
+      toast.error('Post ID is missing', {
+        duration: 3000,
+        position: 'top-center',
+        style: {
+          background: '#333',
+          color: '#fff',
+        },
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch(API_ENDPOINTS.POSTS.DELETE(postId), {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to remove post');
+      }
+
+      const posts = await response.json();
+      dispatch(setPosts({ posts }));
+      toast.success('Post deleted successfully', {
+        duration: 3000,
+        position: 'top-center',
+        style: {
+          background: '#333',
+          color: '#fff',
+        },
+      });
+    } catch (error) {
+      toast.error(error.message || 'Failed to remove post', {
+        duration: 3000,
+        position: 'top-center',
+        style: {
+          background: '#333',
+          color: '#fff',
+        },
+      });
+    }
   };
 
   return (
@@ -66,28 +154,37 @@ const PostWidget = ({
       mt="1rem"
       p="1rem"
     >
-      <FlexBetween mb="0.5rem">
+      <FlexBetween gap="1rem">
         <FlexBetween gap="1rem">
-          <UserImage image={userPicturePath} />
+          <UserImage image={userPicturePath} userId={postUserId} />
           <Box>
             <Typography
               color={main}
               variant="h5"
               fontWeight="500"
+              onClick={() => {
+                navigate(`/profile/${postUserId}`);
+              }}
               sx={{
                 '&:hover': {
-                  color: palette.primary.light,
+                  color: primary,
                   cursor: 'pointer',
                 },
               }}
             >
               {name}
             </Typography>
-            <Typography color={main} fontSize="0.75rem">
-              {location}
-            </Typography>
+            <Typography color={palette.neutral.medium}>{location}</Typography>
           </Box>
         </FlexBetween>
+        {loggedInUserId === postUserId && (
+          <IconButton
+            onClick={() => handleRemovePost(postId)}
+            sx={{ color: palette.error.main }}
+          >
+            <DeleteOutlined />
+          </IconButton>
+        )}
       </FlexBetween>
 
       <Typography color={main} sx={{ mt: '1rem' }}>
@@ -107,9 +204,9 @@ const PostWidget = ({
           <FlexBetween gap="0.3rem">
             <IconButton onClick={patchLike}>
               {isLiked ? (
-                <FavoriteOutlined sx={{ color: primary }} />
+                <FavoriteIcon sx={{ color: 'primary.main', fontSize: '1.5rem' }} />
               ) : (
-                <FavoriteBorderOutlined />
+                <FavoriteBorderIcon sx={{ fontSize: '1.5rem' }} />
               )}
             </IconButton>
             <Typography>{likeCount}</Typography>
@@ -117,15 +214,11 @@ const PostWidget = ({
 
           <FlexBetween gap="0.3rem">
             <IconButton onClick={() => setIsComments(!isComments)}>
-              <ChatBubbleOutlineOutlined />
+              <ChatBubbleOutlineIcon sx={{ fontSize: '1.5rem' }} />
             </IconButton>
             <Typography>{comments.length}</Typography>
           </FlexBetween>
         </FlexBetween>
-
-        <IconButton onClick={deletePost}>
-          <ShareOutlined />
-        </IconButton>
       </FlexBetween>
       {isComments && (
         <Box mt="0.5rem">

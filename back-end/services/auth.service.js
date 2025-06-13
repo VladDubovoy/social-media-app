@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 import { config } from "../config/app.config.js";
 import User from "../models/User.js";
 import { BaseService } from "./base.service.js";

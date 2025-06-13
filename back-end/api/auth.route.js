@@ -6,11 +6,13 @@ const router = express.Router();
 
 const authService = new AuthService();
 
-router.post("/register", async (req, res, next) => {
-  try {
+router.post("/register", upload.single('picture'), async (req, res, next) => {
+  try {    
     const { user, token } = await authService.register(req.body);
+
     res.status(201).json({ user, token });
   } catch (error) {
+    console.error('Registration error:', error);
     next(error);
   }
 });

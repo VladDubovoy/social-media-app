@@ -1,43 +1,56 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Box, IconButton, Typography, useTheme } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import FlexBetween from 'components/FlexBetween';
-import UserImage from 'components/UserImage';
-import { PersonAddOutlined, PersonRemoveOutlined } from '@mui/icons-material';
-import { setFriends } from 'state';
+import toast from 'react-hot-toast';
+import FlexBetween from './FlexBetween';
+import UserImage from './UserImage';
 import { API_ENDPOINTS } from '../config/api.config';
+import { setFriends } from '../state';
 
 const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { _id } = useSelector((state) => state.auth.user);
   const token = useSelector((state) => state.auth.token);
-  const friends = useSelector((state) => state.posts.friends);
-
   const { palette } = useTheme();
-  const primaryLight = palette.primary.light;
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
-
-  const isFriend = friends.find((friend) => friend._id === friendId);
+  const light = palette.primary.light;
 
   const patchFriend = async () => {
-    const response = await fetch(API_ENDPOINTS.USERS.FRIEND(_id, friendId), {
-      method: 'PATCH',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    const data = await response.json();
-    dispatch(setFriends({ friends: data }));
+    try {
+      const response = await fetch(API_ENDPOINTS.USERS.FRIEND(_id, friendId), {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update friend status');
+      }
+
+      const data = await response.json();
+      dispatch(setFriends({ friends: data }));
+    } catch (error) {
+      toast.error(error.message || 'Failed to update friend status', {
+        duration: 3000,
+        position: 'top-center',
+        style: {
+          background: '#333',
+          color: '#fff',
+        },
+      });
+    }
   };
 
   return (
     <FlexBetween>
       <FlexBetween gap="1rem">
-        <UserImage image={userPicturePath} size="55px" />
+        <UserImage image={userPicturePath} size="55px" userId={friendId} />
         <Box>
           <Typography
             color={main}
@@ -45,13 +58,12 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
             fontWeight="500"
             sx={{
               '&:hover': {
-                color: primaryLight,
+                color: light,
                 cursor: 'pointer',
               },
             }}
             onClick={() => {
               navigate(`/profile/${friendId}`);
-              navigate(0);
             }}
           >
             {name}
@@ -63,13 +75,9 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
       </FlexBetween>
       <IconButton
         onClick={() => patchFriend()}
-        sx={{ backgroundColor: primaryLight, p: '0.6rem' }}
+        sx={{ backgroundColor: light, p: '0.6rem' }}
       >
-        {isFriend ? (
-          <PersonRemoveOutlined sx={{ color: main }} />
-        ) : (
-          <PersonAddOutlined sx={{ color: main }} />
-        )}
+        <img src="../assets/user-plus.svg" alt="add friend" />
       </IconButton>
     </FlexBetween>
   );

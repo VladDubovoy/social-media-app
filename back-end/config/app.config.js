@@ -9,14 +9,14 @@ const __dirname = path.dirname(__filename);
 
 export const config = {
   port: process.env.PORT || 6001,
-  mongoUrl: process.env.MONGO_URL || "mongodb://localhost:27017/social_media_app",
+  mongoUrl: process.env.MONGO_URL,
   jwtSecret: process.env.JWT_SECRET || "your-secret-key",
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || "1d",
   uploadPath: path.join(__dirname, "../public/assets"),
   bodyParserLimit: "30mb",
   corsOptions: {
     origin: process.env.CLIENT_URL || "http://localhost:3000",
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   },

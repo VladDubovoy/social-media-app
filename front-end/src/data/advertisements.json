@@ -1,0 +1,354 @@
+{
+  "advertisements": [
+    {
+      "id": 1,
+      "url": "https://picsum.photos/800/400?random=1",
+      "alt": "Fashion Collection",
+      "title": "Summer Fashion",
+      "description": "Discover the latest trends in summer fashion"
+    },
+    {
+      "id": 2,
+      "url": "https://picsum.photos/800/400?random=2",
+      "alt": "Tech Gadgets",
+      "title": "Smart Tech",
+      "description": "Innovative technology for your lifestyle"
+    },
+    {
+      "id": 3,
+      "url": "https://picsum.photos/800/400?random=3",
+      "alt": "Home Decor",
+      "title": "Home Makeover",
+      "description": "Transform your living space with our collection"
+    },
+    {
+      "id": 4,
+      "url": "https://picsum.photos/800/400?random=4",
+      "alt": "Fitness Gear",
+      "title": "Fitness Pro",
+      "description": "Achieve your fitness goals with premium equipment"
+    },
+    {
+      "id": 5,
+      "url": "https://picsum.photos/800/400?random=5",
+      "alt": "Travel Deals",
+      "title": "Travel Adventures",
+      "description": "Explore the world with exclusive travel packages"
+    },
+    {
+      "id": 6,
+      "url": "https://picsum.photos/800/400?random=6",
+      "alt": "Food Delivery",
+      "title": "Food Express",
+      "description": "Delicious meals delivered to your doorstep"
+    },
+    {
+      "id": 7,
+      "url": "https://picsum.photos/800/400?random=7",
+      "alt": "Beauty Products",
+      "title": "Beauty Care",
+      "description": "Premium beauty products for your daily routine"
+    },
+    {
+      "id": 8,
+      "url": "https://picsum.photos/800/400?random=8",
+      "alt": "Gaming Setup",
+      "title": "Gaming World",
+      "description": "Level up your gaming experience"
+    },
+    {
+      "id": 9,
+      "url": "https://picsum.photos/800/400?random=9",
+      "alt": "Coffee Shop",
+      "title": "Coffee Haven",
+      "description": "Artisanal coffee and cozy atmosphere"
+    },
+    {
+      "id": 10,
+      "url": "https://picsum.photos/800/400?random=10",
+      "alt": "Pet Care",
+      "title": "Pet Paradise",
+      "description": "Everything your pet needs in one place"
+    },
+    {
+      "id": 11,
+      "url": "https://picsum.photos/800/400?random=11",
+      "alt": "Yoga Studio",
+      "title": "Yoga Life",
+      "description": "Find your inner peace with our yoga classes"
+    },
+    {
+      "id": 12,
+      "url": "https://picsum.photos/800/400?random=12",
+      "alt": "Book Store",
+      "title": "Book Haven",
+      "description": "Discover your next favorite book"
+    },
+    {
+      "id": 13,
+      "url": "https://picsum.photos/800/400?random=13",
+      "alt": "Art Gallery",
+      "title": "Art Space",
+      "description": "Contemporary art exhibitions and workshops"
+    },
+    {
+      "id": 14,
+      "url": "https://picsum.photos/800/400?random=14",
+      "alt": "Music Festival",
+      "title": "Music Fest",
+      "description": "Experience the biggest music festival of the year"
+    },
+    {
+      "id": 15,
+      "url": "https://picsum.photos/800/400?random=15",
+      "alt": "Car Dealership",
+      "title": "Auto World",
+      "description": "Find your dream car at unbeatable prices"
+    },
+    {
+      "id": 16,
+      "url": "https://picsum.photos/800/400?random=16",
+      "alt": "Restaurant",
+      "title": "Fine Dining",
+      "description": "Exquisite cuisine in an elegant setting"
+    },
+    {
+      "id": 17,
+      "url": "https://picsum.photos/800/400?random=17",
+      "alt": "Furniture Store",
+      "title": "Home Comfort",
+      "description": "Stylish furniture for every room"
+    },
+    {
+      "id": 18,
+      "url": "https://picsum.photos/800/400?random=18",
+      "alt": "Spa Center",
+      "title": "Wellness Spa",
+      "description": "Relax and rejuvenate your body and mind"
+    },
+    {
+      "id": 19,
+      "url": "https://picsum.photos/800/400?random=19",
+      "alt": "Sports Club",
+      "title": "Sports Hub",
+      "description": "Join our community of sports enthusiasts"
+    },
+    {
+      "id": 20,
+      "url": "https://picsum.photos/800/400?random=20",
+      "alt": "Tech Store",
+      "title": "Tech Zone",
+      "description": "Latest gadgets and tech accessories"
+    },
+    {
+      "id": 21,
+      "url": "https://picsum.photos/800/400?random=21",
+      "alt": "Bakery",
+      "title": "Sweet Delights",
+      "description": "Freshly baked goods made with love"
+    },
+    {
+      "id": 22,
+      "url": "https://picsum.photos/800/400?random=22",
+      "alt": "Jewelry Store",
+      "title": "Diamond Dreams",
+      "description": "Exquisite jewelry for every occasion"
+    },
+    {
+      "id": 23,
+      "url": "https://picsum.photos/800/400?random=23",
+      "alt": "Garden Center",
+      "title": "Green Thumb",
+      "description": "Create your perfect garden oasis"
+    },
+    {
+      "id": 24,
+      "url": "https://picsum.photos/800/400?random=24",
+      "alt": "Movie Theater",
+      "title": "Cinema World",
+      "description": "Experience movies like never before"
+    },
+    {
+      "id": 25,
+      "url": "https://picsum.photos/800/400?random=25",
+      "alt": "Fitness Center",
+      "title": "Fit Life",
+      "description": "Transform your body, transform your life"
+    },
+    {
+      "id": 26,
+      "url": "https://picsum.photos/800/400?random=26",
+      "alt": "Wine Shop",
+      "title": "Wine Cellar",
+      "description": "Fine wines from around the world"
+    },
+    {
+      "id": 27,
+      "url": "https://picsum.photos/800/400?random=27",
+      "alt": "Toy Store",
+      "title": "Toy World",
+      "description": "Toys that inspire imagination"
+    },
+    {
+      "id": 28,
+      "url": "https://picsum.photos/800/400?random=28",
+      "alt": "Hair Salon",
+      "title": "Style Studio",
+      "description": "Your look, our passion"
+    },
+    {
+      "id": 29,
+      "url": "https://picsum.photos/800/400?random=29",
+      "alt": "Shoe Store",
+      "title": "Shoe Haven",
+      "description": "Step into comfort and style"
+    },
+    {
+      "id": 30,
+      "url": "https://picsum.photos/800/400?random=30",
+      "alt": "Coffee Shop",
+      "title": "Brew & Co",
+      "description": "Artisanal coffee and fresh pastries"
+    },
+    {
+      "id": 31,
+      "url": "https://picsum.photos/800/400?random=31",
+      "alt": "Art Supplies",
+      "title": "Art Corner",
+      "description": "Everything you need to create"
+    },
+    {
+      "id": 32,
+      "url": "https://picsum.photos/800/400?random=32",
+      "alt": "Pet Store",
+      "title": "Pet Care",
+      "description": "Happy pets, happy life"
+    },
+    {
+      "id": 33,
+      "url": "https://picsum.photos/800/400?random=33",
+      "alt": "Music Store",
+      "title": "Music World",
+      "description": "Instruments and lessons for all"
+    },
+    {
+      "id": 34,
+      "url": "https://picsum.photos/800/400?random=34",
+      "alt": "Bike Shop",
+      "title": "Cycle Life",
+      "description": "Ride in style and comfort"
+    },
+    {
+      "id": 35,
+      "url": "https://picsum.photos/800/400?random=35",
+      "alt": "Candy Store",
+      "title": "Sweet Treats",
+      "description": "Handmade candies and chocolates"
+    },
+    {
+      "id": 36,
+      "url": "https://picsum.photos/800/400?random=36",
+      "alt": "Flower Shop",
+      "title": "Bloom & Grow",
+      "description": "Fresh flowers for every occasion"
+    },
+    {
+      "id": 37,
+      "url": "https://picsum.photos/800/400?random=37",
+      "alt": "Antique Store",
+      "title": "Vintage Finds",
+      "description": "Discover unique treasures"
+    },
+    {
+      "id": 38,
+      "url": "https://picsum.photos/800/400?random=38",
+      "alt": "Smoothie Bar",
+      "title": "Fresh Blend",
+      "description": "Healthy and delicious smoothies"
+    },
+    {
+      "id": 39,
+      "url": "https://picsum.photos/800/400?random=39",
+      "alt": "Comic Store",
+      "title": "Comic World",
+      "description": "Your source for comics and collectibles"
+    },
+    {
+      "id": 40,
+      "url": "https://picsum.photos/800/400?random=40",
+      "alt": "Dance Studio",
+      "title": "Dance Life",
+      "description": "Express yourself through dance"
+    },
+    {
+      "id": 41,
+      "url": "https://picsum.photos/800/400?random=41",
+      "alt": "Tea House",
+      "title": "Tea Time",
+      "description": "Premium teas from around the world"
+    },
+    {
+      "id": 42,
+      "url": "https://picsum.photos/800/400?random=42",
+      "alt": "Skate Shop",
+      "title": "Skate Zone",
+      "description": "Everything for skateboarders"
+    },
+    {
+      "id": 43,
+      "url": "https://picsum.photos/800/400?random=43",
+      "alt": "Craft Store",
+      "title": "Craft Corner",
+      "description": "Supplies for creative minds"
+    },
+    {
+      "id": 44,
+      "url": "https://picsum.photos/800/400?random=44",
+      "alt": "Ice Cream Shop",
+      "title": "Sweet Scoops",
+      "description": "Artisanal ice cream flavors"
+    },
+    {
+      "id": 45,
+      "url": "https://picsum.photos/800/400?random=45",
+      "alt": "Rock Climbing",
+      "title": "Climb High",
+      "description": "Indoor rock climbing adventures"
+    },
+    {
+      "id": 46,
+      "url": "https://picsum.photos/800/400?random=46",
+      "alt": "Pottery Studio",
+      "title": "Clay Works",
+      "description": "Create your own pottery"
+    },
+    {
+      "id": 47,
+      "url": "https://picsum.photos/800/400?random=47",
+      "alt": "Vintage Clothing",
+      "title": "Retro Style",
+      "description": "Unique vintage fashion finds"
+    },
+    {
+      "id": 48,
+      "url": "https://picsum.photos/800/400?random=48",
+      "alt": "Board Game Cafe",
+      "title": "Game Night",
+      "description": "Board games and great company"
+    },
+    {
+      "id": 49,
+      "url": "https://picsum.photos/800/400?random=49",
+      "alt": "Sushi Restaurant",
+      "title": "Sushi Master",
+      "description": "Authentic Japanese cuisine"
+    },
+    {
+      "id": 50,
+      "url": "https://picsum.photos/800/400?random=50",
+      "alt": "Art Gallery",
+      "title": "Modern Art",
+      "description": "Contemporary art exhibitions"
+    }
+  ]
+} 

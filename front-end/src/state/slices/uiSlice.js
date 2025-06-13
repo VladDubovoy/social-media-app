@@ -1,19 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  mode: 'light',
+  isMenuOpen: false,
+  isProfileOpen: false,
 };
 
 export const uiSlice = createSlice({
   name: 'ui',
   initialState,
   reducers: {
-    setMode: (state) => {
-      state.mode = state.mode === 'light' ? 'dark' : 'light';
+    setMenuOpen: (state, action) => {
+      state.isMenuOpen = action.payload;
+    },
+    setProfileOpen: (state, action) => {
+      state.isProfileOpen = action.payload;
     },
   },
 });
 
-export const { setMode } = uiSlice.actions;
-
+export const { setMenuOpen, setProfileOpen } = uiSlice.actions;
 export default uiSlice.reducer; 

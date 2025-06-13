@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Typography, Button } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
